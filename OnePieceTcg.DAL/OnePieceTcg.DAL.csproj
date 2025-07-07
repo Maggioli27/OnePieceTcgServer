@@ -16,11 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OnePieceTcg.Domain\OnePieceTcg.Domain.csproj" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\OnePieceTcg.Domain\OnePieceTcg.Domain.csproj" />
   </ItemGroup>
 
 </Project>

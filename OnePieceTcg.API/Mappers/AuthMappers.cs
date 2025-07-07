@@ -5,7 +5,7 @@ namespace OnePieceTcg.API.Mappers
 {
     public static class AuthMappers
     {
-        public static User ToUtilisateur(this AuthDto form)
+        public static User ToUtilisateur(this AuthRegisterForm form)
         {
             return new User
             {

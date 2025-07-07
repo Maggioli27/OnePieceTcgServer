@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36202.13 d17.14
+VisualStudioVersion = 17.14.36202.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePieceTcg.API", "OnePieceTcg.API\OnePieceTcg.API.csproj", "{5F3020B1-74E5-49A1-BA4B-1BA58F0096E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePieceTcg.Domain", "OnePieceTcg.Domain\OnePieceTcg.Domain.csproj", "{36695381-0377-4697-B68E-0C8098243558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePieceTcg.DAL", "nePieceTcg.DAL\OnePieceTcg.DAL.csproj", "{5BE5CC19-52EB-472C-B8A3-7B45FFDE7D75}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePieceTcg.BLL", "OnePieceTcg.BLL\OnePieceTcg.BLL.csproj", "{C5B2FF37-A1A6-4131-AE48-13EDE8FF1190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePieceTcg.DAL", "OnePieceTcg.DAL\OnePieceTcg.DAL.csproj", "{C4B335F8-9D94-7DD9-42DD-890891D1EC02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{36695381-0377-4697-B68E-0C8098243558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36695381-0377-4697-B68E-0C8098243558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36695381-0377-4697-B68E-0C8098243558}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BE5CC19-52EB-472C-B8A3-7B45FFDE7D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BE5CC19-52EB-472C-B8A3-7B45FFDE7D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BE5CC19-52EB-472C-B8A3-7B45FFDE7D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BE5CC19-52EB-472C-B8A3-7B45FFDE7D75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C5B2FF37-A1A6-4131-AE48-13EDE8FF1190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C5B2FF37-A1A6-4131-AE48-13EDE8FF1190}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5B2FF37-A1A6-4131-AE48-13EDE8FF1190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5B2FF37-A1A6-4131-AE48-13EDE8FF1190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B335F8-9D94-7DD9-42DD-890891D1EC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B335F8-9D94-7DD9-42DD-890891D1EC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B335F8-9D94-7DD9-42DD-890891D1EC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B335F8-9D94-7DD9-42DD-890891D1EC02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

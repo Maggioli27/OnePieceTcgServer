@@ -67,7 +67,11 @@ namespace OnePieceTcg.API.Controllers
                 return Unauthorized("Nom d'utilisateur ou mot de passe incorrect.");
 
             var token = _authService.GenerateToken(user);
-            return Ok(new TokenResponse { Token = token });
+            return Ok(new
+            {
+                message = "Connexion réussie",
+                Token = token
+            });
         }
     }
 }

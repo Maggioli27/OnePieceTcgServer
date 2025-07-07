@@ -46,7 +46,9 @@ namespace OnePieceTcg.DAL.Data
             modelBuilder.ApplyConfiguration(new LineConfiguration());
             modelBuilder.ApplyConfiguration(new CardLineConfiguration());
             modelBuilder.ApplyConfiguration(new SpecialRarityConfiguration());
-
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasConversion<string>();
 
         }
 
