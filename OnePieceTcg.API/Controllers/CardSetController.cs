@@ -31,46 +31,26 @@ namespace OnePieceTcg.API.Controllers //
         }
 
 
-
-        [HttpPost(Name = "CreateExtension")]
-
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpGet("withCardCounts", Name = "GetCardSetsWithCounts")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCardSet([FromBody] CardSetDto dto)
+        public async Task<ActionResult<IEnumerable<CardSetDto>>> GetCardSetsWithCounts()
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var sets = await _context.CardSets
+                .Include(cs => cs.Cards)
+                .OrderByDescending(cs => cs.ReleaseDate)
+                .Select(cs => new CardSetDto
+                {
+                    Id = cs.Id,
+                    Name = cs.Name,
+                    Code = cs.Code,
+                    ReleaseDate = cs.ReleaseDate,
+                    CardCount = cs.Cards.Count
+                })
+                .ToListAsync();
 
-            var cardSet = new CardSet
-            {
-                Name = dto.Name,
-                Code = dto.Code
-            };
-
-            _context.CardSets.Add(cardSet);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAllCardSets), new { id = cardSet.Id }, new
-            {
-                message = "Extension ajoutée avec succès",
-                id = cardSet.Id,
-                name = cardSet.Name
-            });
-        }
-        [HttpDelete("{id}", Name = "DeleteExtension")]
-        [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteCardSet(int id)
-        {
-            var cardSet = await _context.CardSets.FindAsync(id);
-            if (cardSet == null)
-                return NotFound($"Aucune extension trouvée avec l'ID {id}.");
-
-            _context.CardSets.Remove(cardSet);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Extension supprimée avec succès" });
+            return Ok(sets);
         }
     }
 

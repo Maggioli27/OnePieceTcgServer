@@ -11,6 +11,7 @@ namespace OnePieceTcg.Domain.Models
         public int Id { get; set; }
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
+        public DateTime ReleaseDate { get; set; }
         public ICollection<Card> Cards { get; set; } = new List<Card>();
     }
 }

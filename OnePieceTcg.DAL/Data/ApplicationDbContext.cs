@@ -22,14 +22,15 @@ namespace OnePieceTcg.DAL.Data
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Card> Cards { get; set; } = null!;
         public DbSet<SpecialRarity> SpecialRarities { get; set; }
-        public DbSet<Collection> Collections { get; set; } = null!;
         public DbSet<CollectionCard> CollectionCards { get; set; } = null!;
         public DbSet<CardType> CardTypes { get; set; } = null!;
         public DbSet<Color> Colors { get; set; } = null!;
         public DbSet<Rarity> Rarities { get; set; } = null!;
         public DbSet<CardSet> CardSets { get; set; } = null!;
-        public DbSet<Line> Traits { get; set; } = null!;
-        public DbSet<CardLine> CardTraits { get; set; } = null!;
+        public DbSet<Line> Line { get; set; } = null!;
+        public DbSet<CardLine> CardLine { get; set; } = null!;
+        public DbSet<FavoriteCard> FavoriteCards { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,7 +38,6 @@ namespace OnePieceTcg.DAL.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new CollectionConfiguration());
             modelBuilder.ApplyConfiguration(new CollectionCardConfiguration());
             modelBuilder.ApplyConfiguration(new CardConfiguration());
             modelBuilder.ApplyConfiguration(new CardTypeConfiguration());
@@ -46,6 +46,7 @@ namespace OnePieceTcg.DAL.Data
             modelBuilder.ApplyConfiguration(new CardSetConfiguration());
             modelBuilder.ApplyConfiguration(new LineConfiguration());
             modelBuilder.ApplyConfiguration(new CardLineConfiguration());
+            modelBuilder.ApplyConfiguration(new FavoriteCardConfiguration());
             modelBuilder.ApplyConfiguration(new SpecialRarityConfiguration());
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)

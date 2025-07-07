@@ -6,6 +6,7 @@
         public string Series { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public string CardSetName { get; set; } = null!;
+        public string CardType { get; set; } = null!;
         public string? ColorName { get; set; }
         public string? RarityName { get; set; }
         public string? SpecialRarityName { get; set; }

@@ -22,7 +22,8 @@ namespace OnePieceTcg.API.Controllers
 
         [HttpGet("byExtension/{setId}", Name = "GetCardsByExtension")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<CardInSetDto>>> GetCardsBySet(int setId)
         {
             var exists = await _context.CardSets.AnyAsync(cs => cs.Id == setId);
@@ -40,64 +41,46 @@ namespace OnePieceTcg.API.Controllers
             return Ok(cards.Select(c => c.ToDto()));
         }
 
-        [HttpPost(Name = "CreateCard")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpGet("filtered")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCard([FromBody] CardCreateDto dto)
+        public async Task<ActionResult<IEnumerable<CardInSetDto>>> GetFilteredCards(
+            string? color,
+            string? rarity,
+            string? type,
+            string? specialRarity
+        )
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var query = _context.Cards
+                .Include(c => c.Color)
+                .Include(c => c.Rarity)
+                .Include(c => c.CardType)
+                .Include(c => c.SpecialRarity)
+                .AsQueryable();
 
-            var cardSet = await _context.CardSets.SingleOrDefaultAsync(cs => cs.Name == dto.CardSetName);
-            if (cardSet == null)
-                return BadRequest($"Extension '{dto.CardSetName}' introuvable.");
+            if (!string.IsNullOrEmpty(color))
+                query = query.Where(c => c.Color != null && c.Color.Name == color);
 
+            if (!string.IsNullOrEmpty(rarity))
+                query = query.Where(c => c.Rarity != null && c.Rarity.Name == rarity);
 
-            var color = string.IsNullOrEmpty(dto.ColorName) ? null :
-                await _context.Colors.SingleOrDefaultAsync(c => c.Name == dto.ColorName);
+            if (!string.IsNullOrEmpty(type))
+                query = query.Where(c => c.CardType != null && c.CardType.Name == type);
 
-            var rarity = string.IsNullOrEmpty(dto.RarityName) ? null :
-                await _context.Rarities.SingleOrDefaultAsync(r => r.Name == dto.RarityName);
+            if (!string.IsNullOrEmpty(specialRarity))
+                query = query.Where(c => c.SpecialRarity != null && c.SpecialRarity.Name == specialRarity);
 
-            var specialRarity = string.IsNullOrEmpty(dto.SpecialRarityName) ? null :
-                await _context.SpecialRarities.SingleOrDefaultAsync(sr => sr.Name == dto.SpecialRarityName);
-
-            var card = new Card
-            {
-                Name = dto.Name,
-                Series = dto.Series,
-                ImageUrl = dto.ImageUrl,
-                CardSetId = cardSet.Id,
-                ColorId = color?.Id,
-                RarityId = rarity?.Id,
-                SpecialRarityId = specialRarity?.Id
-            };
-
-            _context.Cards.Add(card);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetCardsBySet), new { setId = card.CardSetId }, new
-            {
-                message = "Carte créée avec succès",
-                id = card.Id
-            });
+            var cards = await query.ToListAsync();
+            return Ok(cards.Select(c => c.ToDto()));
         }
-        [HttpDelete("{id}", Name = "DeleteCard")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteCard(int id)
-        {
-            var card = await _context.Cards.FindAsync(id);
-            if (card == null)
-                return NotFound($"Aucune carte trouvée avec l'ID {id}.");
 
-            _context.Cards.Remove(card);
-            await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Carte supprimée avec succès", id = card.Id, name = card.Name });
-        }
+
+
 
 
     }
 }
+
 

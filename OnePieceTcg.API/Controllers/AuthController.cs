@@ -26,6 +26,9 @@ namespace OnePieceTcg.API.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] AuthRegisterForm form)
         {
             if (!ModelState.IsValid)

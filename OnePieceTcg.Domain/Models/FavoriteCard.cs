@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace OnePieceTcg.Domain.Models
 {
-    public class Collection
+    public class FavoriteCard
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
         public int UserId { get; set; }
+        public int CardId { get; set; }
 
         public User User { get; set; } = null!;
-
-        public ICollection<CollectionCard> CollectionCards { get; set; } = new List<CollectionCard>();
-
+        public Card Card { get; set; } = null!;
     }
 }
