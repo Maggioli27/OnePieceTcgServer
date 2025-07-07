@@ -16,7 +16,7 @@ namespace OnePieceTcg.DAL.Configuration
             builder.HasMany(cs => cs.Cards)
                 .WithOne(c => c.CardSet)
                 .HasForeignKey(c => c.CardSetId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

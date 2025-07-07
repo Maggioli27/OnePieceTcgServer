@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnePieceTcg.API.DTOs;
 using OnePieceTcg.API.Mappers;
@@ -18,7 +19,7 @@ namespace OnePieceTcg.API.Controllers //
             _context = context;
         }
 
-        [HttpGet(Name = "Collections")]
+        [HttpGet(Name = "GetAllExtensions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -29,27 +30,47 @@ namespace OnePieceTcg.API.Controllers //
             return Ok(setDtos);
         }
 
-        [HttpGet("{setId}/cards", Name = "Cartes dans la collection")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<CardInSetDto>>> GetCardsInSet(int setId)
+
+
+        [HttpPost(Name = "CreateExtension")]
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateCardSet([FromBody] CardSetDto dto)
         {
-            var exists = await _context.CardSets.AnyAsync(cs => cs.Id == setId);
-            if (!exists)
-                return NotFound($"Le set avec l'ID {setId} n'existe pas.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var cards = await _context.Cards
-                .Where(c => c.CardSetId == setId)
-                .Include(c => c.CardType)
-                .Include(c => c.Color)
-                .Include(c => c.Rarity)
-                .Include(c => c.SpecialRarity)
-                .ToListAsync();
+            var cardSet = new CardSet
+            {
+                Name = dto.Name,
+                Code = dto.Code
+            };
 
-            var cardDtos = cards.Select(CardSetMappers.ToDto).ToList();
+            _context.CardSets.Add(cardSet);
+            await _context.SaveChangesAsync();
 
-            return Ok(cardDtos);
+            return CreatedAtAction(nameof(GetAllCardSets), new { id = cardSet.Id }, new
+            {
+                message = "Extension ajoutée avec succès",
+                id = cardSet.Id,
+                name = cardSet.Name
+            });
+        }
+        [HttpDelete("{id}", Name = "DeleteExtension")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteCardSet(int id)
+        {
+            var cardSet = await _context.CardSets.FindAsync(id);
+            if (cardSet == null)
+                return NotFound($"Aucune extension trouvée avec l'ID {id}.");
+
+            _context.CardSets.Remove(cardSet);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Extension supprimée avec succès" });
         }
     }
 

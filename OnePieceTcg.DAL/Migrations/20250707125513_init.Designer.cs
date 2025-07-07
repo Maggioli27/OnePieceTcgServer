@@ -11,8 +11,8 @@ using OnePieceTcg.DAL.Data;
 namespace OnePieceTcg.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250706014233_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250707125513_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,14 @@ namespace OnePieceTcg.DAL.Migrations
                     b.Property<int?>("RarityId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("Series")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SpecialRarityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -70,6 +77,8 @@ namespace OnePieceTcg.DAL.Migrations
                     b.HasIndex("ColorId");
 
                     b.HasIndex("RarityId");
+
+                    b.HasIndex("SpecialRarityId");
 
                     b.HasIndex("UserId");
 
@@ -220,6 +229,23 @@ namespace OnePieceTcg.DAL.Migrations
                     b.ToTable("Rarities");
                 });
 
+            modelBuilder.Entity("OnePieceTcg.Domain.Models.SpecialRarity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialRarities");
+                });
+
             modelBuilder.Entity("OnePieceTcg.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -235,8 +261,9 @@ namespace OnePieceTcg.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -252,7 +279,7 @@ namespace OnePieceTcg.DAL.Migrations
                     b.HasOne("OnePieceTcg.Domain.Models.CardSet", "CardSet")
                         .WithMany("Cards")
                         .HasForeignKey("CardSetId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnePieceTcg.Domain.Models.CardType", "CardType")
                         .WithMany("Cards")
@@ -269,11 +296,14 @@ namespace OnePieceTcg.DAL.Migrations
                         .HasForeignKey("RarityId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OnePieceTcg.Domain.Models.User", "User")
+                    b.HasOne("OnePieceTcg.Domain.Models.SpecialRarity", "SpecialRarity")
+                        .WithMany("Cards")
+                        .HasForeignKey("SpecialRarityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OnePieceTcg.Domain.Models.User", null)
                         .WithMany("cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CardSet");
 
@@ -283,7 +313,7 @@ namespace OnePieceTcg.DAL.Migrations
 
                     b.Navigation("Rarity");
 
-                    b.Navigation("User");
+                    b.Navigation("SpecialRarity");
                 });
 
             modelBuilder.Entity("OnePieceTcg.Domain.Models.CardLine", b =>
@@ -368,6 +398,11 @@ namespace OnePieceTcg.DAL.Migrations
                 });
 
             modelBuilder.Entity("OnePieceTcg.Domain.Models.Rarity", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("OnePieceTcg.Domain.Models.SpecialRarity", b =>
                 {
                     b.Navigation("Cards");
                 });

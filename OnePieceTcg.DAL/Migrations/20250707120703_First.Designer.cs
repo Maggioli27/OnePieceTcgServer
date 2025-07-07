@@ -11,8 +11,8 @@ using OnePieceTcg.DAL.Data;
 namespace OnePieceTcg.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250706201710_InitialCreate1")]
-    partial class InitialCreate1
+    [Migration("20250707120703_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,10 @@ namespace OnePieceTcg.DAL.Migrations
 
                     b.Property<int?>("RarityId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Series")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SpecialRarityId")
                         .HasColumnType("int");
@@ -257,8 +261,9 @@ namespace OnePieceTcg.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -274,7 +279,7 @@ namespace OnePieceTcg.DAL.Migrations
                     b.HasOne("OnePieceTcg.Domain.Models.CardSet", "CardSet")
                         .WithMany("Cards")
                         .HasForeignKey("CardSetId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnePieceTcg.Domain.Models.CardType", "CardType")
                         .WithMany("Cards")

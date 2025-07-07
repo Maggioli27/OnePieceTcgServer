@@ -10,14 +10,14 @@ namespace OnePieceTcg.Domain.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
+
+        public string Series { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public int Cost { get; set; }
         public string? Description { get; set; }
 
 
-        // Relations vers User (propriétaire ou créateur ?)
-        public int UserId { get; set; }
-        public User User { get; set; } = null!;
+
 
         // Remplace les string par des FK et navigation vers entités liées
         public int? CardTypeId { get; set; }

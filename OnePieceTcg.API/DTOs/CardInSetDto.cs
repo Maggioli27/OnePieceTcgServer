@@ -9,5 +9,6 @@
         public string Rarity { get; set; } = "";
         public string SpecialRarity { get; set; } = ""; // ← si tu veux une rareté spéciale à part
         public string ImageUrl { get; set; } = "";
+        public string Series { get; set; } = "";
     }
 }

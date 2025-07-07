@@ -5,7 +5,7 @@
 namespace OnePieceTcg.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,8 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +30,7 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,7 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,11 +56,24 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rarities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpecialRarity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(25)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialRarity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +82,7 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,10 +95,10 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                    UserName = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,15 +111,17 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", nullable: false),
+                    Series = table.Column<string>(type: "nvarchar(25)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(255)", nullable: false),
                     Cost = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(255)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CardTypeId = table.Column<int>(type: "int", nullable: true),
                     ColorId = table.Column<int>(type: "int", nullable: true),
                     RarityId = table.Column<int>(type: "int", nullable: true),
-                    CardSetId = table.Column<int>(type: "int", nullable: true)
+                    CardSetId = table.Column<int>(type: "int", nullable: true),
+                    SpecialRarityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -116,7 +131,7 @@ namespace OnePieceTcg.DAL.Migrations
                         column: x => x.CardSetId,
                         principalTable: "CardSets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Cards_CardTypes_CardTypeId",
                         column: x => x.CardTypeId,
@@ -136,11 +151,17 @@ namespace OnePieceTcg.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Cards_SpecialRarity_SpecialRarityId",
+                        column: x => x.SpecialRarityId,
+                        principalTable: "SpecialRarity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Cards_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,7 +170,7 @@ namespace OnePieceTcg.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -233,6 +254,11 @@ namespace OnePieceTcg.DAL.Migrations
                 column: "RarityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cards_SpecialRarityId",
+                table: "Cards",
+                column: "SpecialRarityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cards_UserId",
                 table: "Cards",
                 column: "UserId");
@@ -282,6 +308,9 @@ namespace OnePieceTcg.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rarities");
+
+            migrationBuilder.DropTable(
+                name: "SpecialRarity");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -21,6 +21,7 @@ namespace OnePieceTcg.DAL.Data
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Card> Cards { get; set; } = null!;
+        public DbSet<SpecialRarity> SpecialRarities { get; set; }
         public DbSet<Collection> Collections { get; set; } = null!;
         public DbSet<CollectionCard> CollectionCards { get; set; } = null!;
         public DbSet<CardType> CardTypes { get; set; } = null!;
