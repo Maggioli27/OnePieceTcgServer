@@ -12,8 +12,8 @@ using OnePieceTcg.DAL.Data;
 namespace OnePieceTcg.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250708113600_test")]
-    partial class test
+    [Migration("20250708143920_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,10 @@ namespace OnePieceTcg.DAL.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CardCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("CardSetId")
                         .HasColumnType("integer");

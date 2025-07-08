@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public string Type { get; set; } = "";
+        public string CardCode { get; set; } = null!;
         public string Color { get; set; } = "";
         public string Rarity { get; set; } = "";
         public string SpecialRarity { get; set; } = "";

@@ -30,6 +30,10 @@ namespace OnePieceTcg.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CardCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("CardSetId")
                         .HasColumnType("integer");
 

@@ -13,6 +13,7 @@ namespace OnePieceTcg.API.Mappers
                 Name = card.Name,
                 Type = card.CardType?.Name ?? string.Empty,
                 Color = card.Color?.Name ?? string.Empty,
+                CardCode = card.CardCode,
                 Rarity = card.Rarity?.Name ?? string.Empty,
                 SpecialRarity = card.SpecialRarity?.Name ?? string.Empty,
                 ImageUrl = card.ImageUrl,
