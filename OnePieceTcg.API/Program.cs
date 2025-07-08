@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OnePieceTcg.API.Services;
 using OnePieceTcg.BLL.Services;
@@ -42,9 +43,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-// Connexion SQL Server
+// Connexion SQL 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+
+
 
 // Ajouter BLL services
 builder.Services.AddScoped<UserService>();
