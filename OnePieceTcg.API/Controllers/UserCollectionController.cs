@@ -213,5 +213,40 @@ namespace OnePieceTcg.API.Controllers
                 alreadyOwned = alreadyOwned.Count
             });
         }
+        [HttpGet("by-code/{code}")]
+        public async Task<ActionResult<CardInSetDto>> GetByCardCode(string code)
+        {
+            var card = await _context.Cards
+                .Include(c => c.Color)
+                .Include(c => c.Rarity)
+                .Include(c => c.SpecialRarity)
+                .Include(c => c.CardType)
+                .FirstOrDefaultAsync(c => c.CardCode != null && c.CardCode.ToLower() == code.ToLower());
+
+            if (card == null)
+                return NotFound($"Carte avec code '{code}' introuvable.");
+
+            return Ok(CardMappers.ToDto(card));
+        }
+
+        [HttpGet("check-ownership/by-code/{code}")]
+        public async Task<IActionResult> CheckOwnershipByCardCode(string code)
+        {
+            int userId = User.GetUserId();
+
+            var card = await _context.Cards
+                .FirstOrDefaultAsync(c => c.CardCode != null && c.CardCode.ToLower() == code.ToLower());
+
+            if (card == null)
+                return NotFound($"Carte avec code '{code}' introuvable.");
+
+            bool owns = await _context.CollectionCards.AnyAsync(cc => cc.UserId == userId && cc.CardId == card.Id);
+
+            return Ok(new
+            {
+                card = CardMappers.ToDto(card),
+                alreadyOwned = owns
+            });
+        }
     }
 }

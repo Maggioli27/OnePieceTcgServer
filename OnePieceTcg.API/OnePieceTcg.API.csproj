@@ -22,4 +22,8 @@
     <ProjectReference Include="..\OnePieceTcg.Domain\OnePieceTcg.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\NouveauEmpereurs\" />
+  </ItemGroup>
+
 </Project>

@@ -12,7 +12,7 @@ using OnePieceTcg.DAL.Data;
 namespace OnePieceTcg.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250708143920_first")]
+    [Migration("20250709071950_first")]
     partial class first
     {
         /// <inheritdoc />

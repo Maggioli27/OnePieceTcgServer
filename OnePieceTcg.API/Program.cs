@@ -43,10 +43,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-// Connexion SQL 
+// Connexion SQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-
 
 
 
@@ -86,10 +85,15 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger(c =>
+    {
+        c.SerializeAsV2 = false; // Swagger v3 (OpenAPI 3.0)
+        c.RouteTemplate = "swagger/{documentName}/swagger.json";
+    });
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 

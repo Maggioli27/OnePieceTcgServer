@@ -16,7 +16,7 @@ namespace OnePieceTcg.API.Mappers
                 CardCode = card.CardCode,
                 Rarity = card.Rarity?.Name ?? string.Empty,
                 SpecialRarity = card.SpecialRarity?.Name ?? string.Empty,
-                ImageUrl = card.ImageUrl,
+                ImageUrl = $"/images/{card.Series?.ToLower()}/{card.CardCode}.jpg",
                 Series = card.Series ?? string.Empty
             };
         }
